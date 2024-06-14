@@ -19,7 +19,6 @@ public class VisionCone : MonoBehaviour
         VisionAngle *= Mathf.Deg2Rad;
     }
 
-    // Update is called once per frame
     void Update()
     {
         DrawVisionCone();
@@ -41,9 +40,16 @@ public class VisionCone : MonoBehaviour
             Cosine = Mathf.Cos(Currentangle);
             Vector3 RaycastDirection = (transform.forward * Cosine) + (transform.right * Sine);
             Vector3 VertForward = (Vector3.forward * Cosine) + (Vector3.right * Sine);
+
             if (Physics.Raycast(transform.position, RaycastDirection, out RaycastHit hit, VisionRange, VisionObstructingLayer))
             {
                 Vertices[i + 1] = VertForward * hit.distance;
+                Debug.Log(hit.collider.gameObject.name);
+                if (hit.collider.gameObject.CompareTag("Player"))
+                {
+                    Time.timeScale = 0f;
+                }
+
             }
             else
             {
