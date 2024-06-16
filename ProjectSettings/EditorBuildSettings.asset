@@ -5,8 +5,4 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes: []
-  m_configObjects:
-    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: ade814ba17697c641852724dbe4d3b86,
-      type: 2}
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
-      guid: d4c495506eaf7f54a9fd477be082bfba, type: 2}
+  m_configObjects: {}

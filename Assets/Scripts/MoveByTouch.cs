@@ -24,4 +24,16 @@ public class MoveByTouch : MonoBehaviour
 
     }
 
+    public void SpeedBoost()
+    {
+        runSpeed = 20f;
+        StartCoroutine(RevertSpeedAfterDelay());
+    }
+    IEnumerator RevertSpeedAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+
+        runSpeed = 7f;
+    }
+
 }
