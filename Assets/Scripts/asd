@@ -1,0 +1,9 @@
+void Rotate180Degrees()
+    {
+        // Determine if the current position is at the start or end position
+        if (Mathf.Approximately(transform.position.x, startPosition) || Mathf.Approximately(transform.position.x, endPosition))
+        {
+            // Rotate 180 degrees around the y-axis (assuming rotation in the horizontal plane)
+            transform.rotation = Quaternion.Euler(0f, rotationAngle, 0f);
+        }
+    }
