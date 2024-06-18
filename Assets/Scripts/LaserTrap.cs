@@ -5,11 +5,12 @@ using UnityEngine;
 public class LaserTrap : MonoBehaviour
 {
 
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
-            GetComponent<MoveByTouch>().Die();
+            other.GetComponent<MoveByTouch>().Die();
         }
     }
 }

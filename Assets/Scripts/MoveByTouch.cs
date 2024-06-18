@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
 public class MoveByTouch : MonoBehaviour
 {
     public Joystick joystick;
@@ -63,12 +65,44 @@ public class MoveByTouch : MonoBehaviour
     //     }
     // }
 
-    IEnumerator BreakablePowerAfterDelay()
+
+    private void OnControllerColliderHit(ControllerColliderHit other)
     {
-        yield return null;
-        breakableCount = 0;
-        isBreakablePower = false;
+
+        if (isBreakablePower)
+        {
+            if (other.gameObject.CompareTag("Breakable"))
+            {
+                Destroy(other.gameObject);
+                breakableCount++;
+                Debug.Log(breakableCount);
+
+                if (breakableCount >= 1)
+                {
+                    breakableCount = 0;
+                    isBreakablePower = false;
+                }
+            }
+        }
     }
+    // private void OnCollisionEnter(Collision other)
+    // {
+    //     Debug.Log("Collided");
+    //     if (isBreakablePower)
+    //     {
+    //         if (other.gameObject.CompareTag("Breakable"))
+    //         {
+    //             Destroy(other.gameObject);
+    //             breakableCount++;
+    //             if (breakableCount >= 2)
+    //             {
+    //                 breakableCount = 0;
+    //                 isBreakablePower = false;
+    //             }
+    //         }
+    //     }
+    // }
+
     IEnumerator RevertInvisibleAfterDelay()
     {
         yield return new WaitForSeconds(5f);
