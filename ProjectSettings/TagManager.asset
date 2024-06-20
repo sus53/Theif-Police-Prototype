@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Invisible
   - Breakable
+  - Spike
   layers:
   - Default
   - TransparentFX

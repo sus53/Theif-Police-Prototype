@@ -6,7 +6,7 @@ public class LaserActivator : MonoBehaviour
     public GameObject laser;
     public GameObject laserBody;
     // public Vector3 finalPosition;
-
+    public float moveTime = 1f;
     void Start()
     {
         laser.SetActive(false);
@@ -30,7 +30,6 @@ public class LaserActivator : MonoBehaviour
         float elapsedTime = 0f;
         Vector3 startPosition = laserBody.transform.position;
         Vector3 targetPosition = new Vector3(-13.32f, -0.08f, -1f);
-        float moveTime = 5f;
 
         while (elapsedTime < moveTime)
         {
