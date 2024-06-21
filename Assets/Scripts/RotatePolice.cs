@@ -9,6 +9,7 @@ public class RotatePolice : MonoBehaviour
     public float rotationSpeed = 3f;
     public float tolerance = 0.1f;
     public bool invertRotation;
+    public bool rotateFromLeft;
     private Quaternion targetRotation;
     private bool isRotating = false;
 
@@ -24,12 +25,12 @@ public class RotatePolice : MonoBehaviour
 
         if (IsApproximatelyEqual(transform.position, initialPosition))
         {
-            targetRotation = Quaternion.Euler(0f, invertRotation ? 360f : 180f, 0f);
+            targetRotation = Quaternion.Euler(0f, invertRotation ? rotateFromLeft ? 0f : 360f : 180f, 0f);
             isRotating = true;
         }
         else if (IsApproximatelyEqual(transform.position, finalPosition))
         {
-            targetRotation = Quaternion.Euler(0f, invertRotation ? 180f : 360f, 0f);
+            targetRotation = Quaternion.Euler(0f, invertRotation ? 180f : rotateFromLeft ? 0f : 360f, 0f);
             isRotating = true;
         }
 

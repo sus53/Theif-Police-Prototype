@@ -4,6 +4,7 @@ using UnityEngine;
 public class LaserActivator : MonoBehaviour
 {
     public GameObject laser;
+    public Vector3 targetPosition;
     public GameObject laserBody;
     // public Vector3 finalPosition;
     public float moveTime = 1f;
@@ -29,7 +30,6 @@ public class LaserActivator : MonoBehaviour
 
         float elapsedTime = 0f;
         Vector3 startPosition = laserBody.transform.position;
-        Vector3 targetPosition = new Vector3(-13.32f, -0.08f, -1f);
 
         while (elapsedTime < moveTime)
         {

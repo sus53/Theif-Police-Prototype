@@ -73,8 +73,10 @@
     <Compile Include="Assets\Scripts\SpeedBooster.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickSetterExample.cs" />
     <Compile Include="Assets\Scripts\EatCoin.cs" />
+    <Compile Include="Assets\Scripts\DisableLaser.cs" />
     <Compile Include="Assets\Scripts\SpikeToggle.cs" />
     <Compile Include="Assets\Scripts\Door.cs" />
+    <Compile Include="Assets\Scripts\Teleport.cs" />
     <Compile Include="Assets\Scripts\ButtonDoor.cs" />
     <Compile Include="Assets\Scripts\LevelComplete.cs" />
     <Compile Include="Assets\Scripts\Invisible.cs" />
