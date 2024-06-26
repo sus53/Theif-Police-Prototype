@@ -4,7 +4,6 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 public class MoveByTouch : MonoBehaviour
 {
     public Joystick joystick;
@@ -14,20 +13,30 @@ public class MoveByTouch : MonoBehaviour
     private bool isBreakablePower = false;
     private int breakableCount = 0;
     [SerializeField] CharacterController characterController;
-
+    private Animator animator;
+    private Quaternion playerTargetRotation;
+    private Transform child;
     void Start()
     {
         material = GetComponent<Renderer>().material;
         characterController = GetComponent<CharacterController>();
+        child = transform.GetChild(0);
+        animator = child.GetComponent<Animator>();
     }
     void Update()
     {
 
-        Vector3 move = new Vector3(joystick.Horizontal, 0, joystick.Vertical).normalized;
+        Vector3 move = new Vector3(joystick.Horizontal, 0f, joystick.Vertical).normalized;
+        animator.SetFloat("move_speed", move.magnitude);
         if (move.magnitude >= 0.1f)
         {
+            playerTargetRotation = Quaternion.LookRotation(move);
+            child.rotation = Quaternion.Slerp(child.rotation, playerTargetRotation, Time.deltaTime * 5f);
             characterController.Move(move * runSpeed * Time.deltaTime);
+
         }
+
+
 
 
     }

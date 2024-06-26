@@ -10,7 +10,7 @@ public class SpeedBooster : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.name == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             player = other.gameObject;
             player.GetComponent<MoveByTouch>().SpeedBoost();

@@ -10,7 +10,7 @@ public class OpenDoor : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
 
-        if (other.gameObject.name == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             Destroy(door);
         }
