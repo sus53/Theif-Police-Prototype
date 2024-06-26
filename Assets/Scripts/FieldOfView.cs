@@ -57,6 +57,7 @@ public class FieldOfView : MonoBehaviour
 				float dstToTarget = Vector3.Distance(transform.position, target.position);
 				if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
 				{
+					Debug.Log("hello?");
 					target.GetComponent<MoveByTouch>().Die();
 				}
 			}
