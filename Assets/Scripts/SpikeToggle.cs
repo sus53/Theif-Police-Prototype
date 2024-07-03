@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpikeToggle : MonoBehaviour
 {
     public GameObject spike;
-    private float openSpeed = 0.275f;
+    private float openSpeed = 0.3f;
 
     void Start()
     {

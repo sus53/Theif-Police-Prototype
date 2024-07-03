@@ -10,7 +10,6 @@ public class SpikeTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player = other.gameObject;
-            Debug.Log("Spike");
             player.GetComponent<MoveByTouch>().Die();
         }
     }

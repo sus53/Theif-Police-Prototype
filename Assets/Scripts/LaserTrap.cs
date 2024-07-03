@@ -15,7 +15,6 @@ public class LaserTrap : MonoBehaviour
 
         if (laserRenderer == null || laserCollider == null)
         {
-            Debug.LogError("LaserTrap script must be attached to an object with a Renderer and Collider component.");
             enabled = false; // Disable this script if prerequisites are not met
             return;
         }
