@@ -8,6 +8,7 @@ public class LaserActivator : MonoBehaviour
     public GameObject laserBody;
     // public Vector3 finalPosition;
     public float moveTime = 1f;
+     public AudioSource laserAudio;
     void Start()
     {
         laser.SetActive(false);
@@ -17,6 +18,7 @@ public class LaserActivator : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // laserAudio.Play();
             StartCoroutine(ActivateLaser());
         }
     }
@@ -39,5 +41,7 @@ public class LaserActivator : MonoBehaviour
         }
 
         laserBody.transform.position = targetPosition;
+//  laserAudio.Stop();
+       
     }
 }

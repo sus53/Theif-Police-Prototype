@@ -9,6 +9,8 @@ public class DarazDoor : MonoBehaviour
 
     private Vector3 rdInitialPosition;
     private Vector3 ldInitialPosition;
+    public AudioSource doorOpenAudio;
+    public AudioSource doorCloseAudio;
     void Start()
     {
         rdInitialPosition = RightDoor.transform.position;
@@ -23,6 +25,7 @@ public class DarazDoor : MonoBehaviour
             LeftDoor.transform.position = new Vector3(ldInitialPosition.x - 0.35f, 1.09f, ldInitialPosition.z + 0.37f);
             RightDoor.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
             LeftDoor.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
+            doorCloseAudio.Play();
         }
     }
 
@@ -36,6 +39,7 @@ public class DarazDoor : MonoBehaviour
             LeftDoor.transform.position = ldInitialPosition;
             RightDoor.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             LeftDoor.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            doorOpenAudio.Play();
         }
     }
 }

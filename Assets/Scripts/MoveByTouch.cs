@@ -18,7 +18,11 @@ public class MoveByTouch : MonoBehaviour
     private Transform grandChild;
     public Material dissolveMaterial;
     public Material invisibleDissolveMaterial;
-    public List<Material> defaultPlayerMaterial = new List<Material>();
+    private List<Material> defaultPlayerMaterial = new List<Material>();
+    public AudioSource ObstacleBreak;
+    public AudioSource Footstep;
+    	public AudioSource gameoverSound;
+        public AudioSource bgAudio;
 
     void Start()
     {
@@ -33,19 +37,47 @@ public class MoveByTouch : MonoBehaviour
         // dissolveMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
     }
 
-    void Update()
+   void Update()
     {
         Vector3 move = new Vector3(joystick.Horizontal, 0f, joystick.Vertical).normalized;
         animator.SetFloat("move_speed", move.magnitude);
+        
         if (move.magnitude >= 0.1f)
         {
             playerTargetRotation = Quaternion.LookRotation(move);
             child.rotation = Quaternion.Slerp(child.rotation, playerTargetRotation, Time.deltaTime * 5f);
             characterController.Move(move * runSpeed * Time.deltaTime);
-            // rb.AddForce(move * runSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            
+            if (!Footstep.isPlaying)
+            {
+                Footstep.Play();
+            }
+
+            Footstep.volume = Mathf.Lerp(Footstep.volume, 1f, Time.deltaTime * 5f); 
+        }
+        else
+        {
+            if (Footstep.isPlaying)
+            {
+                StartCoroutine(FadeOutFootstep(Footstep, 0.5f)); 
+            }
         }
 
+        Footstep.pitch = Random.Range(0.8f, 1.2f);
+    }
 
+    IEnumerator FadeOutFootstep(AudioSource audioSource, float fadeTime)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / fadeTime;
+            yield return null;
+        }
+
+        audioSource.Stop();
+        audioSource.volume = startVolume; 
     }
     private void GetTheifMaterials()
     {
@@ -57,29 +89,45 @@ public class MoveByTouch : MonoBehaviour
     public void Invisible()
     {
         gameObject.layer = 7;
-        ChangePlayerMaterial(new Color(0f, 0f, 0f), true, 1.5f);
+        ChangePlayerMaterial(new Color(0f, 0f, 0f), 1.5f);
         StartCoroutine(RevertInvisibleAfterDelay());
     }
 
     public void SpeedBoost()
     {
         runSpeed = 10f;
-        ChangePlayerMaterial(new Color(0.0f, 0.922f, 0.384f), false, 1.5f);
+        // ChangePlayerMaterial(new Color(0.0f, 0.922f, 0.384f), 1.5f);
+transform.GetChild(1).gameObject.SetActive(true);
         StartCoroutine(RevertSpeedAfterDelay());
     }
 
     public void BreakablePower()
     {
         isBreakablePower = true;
-        ChangePlayerMaterial(new Color(0.1f, 0.0f, 0.2f), false, 1f);
+        StartCoroutine(ChangeScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f));
     }
 
-    public void ChangePlayerMaterial(Color finalColor, bool isAlpha, float duration)
+    IEnumerator ChangeScale(Vector3 targetScale, float duration)
+    {
+        Vector3 originalScale = transform.localScale;
+        float currentTime = 0f;
+
+        while (currentTime <= duration)
+        {
+            child.transform.localScale = Vector3.Lerp(originalScale, targetScale, currentTime / duration);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+
+        child.transform.localScale = targetScale;
+    }
+
+    public void ChangePlayerMaterial(Color finalColor, float duration)
     {
         for (int i = 1; i < child.childCount; i++)
         {
             SkinnedMeshRenderer renderer = child.GetChild(i).GetComponent<SkinnedMeshRenderer>();
-            StartCoroutine(SlowlyDissolve(renderer, renderer.material.color, finalColor, duration, 0f, 1f, isAlpha));
+            StartCoroutine(SlowlyDissolve(renderer, renderer.material.color, finalColor, duration, 0f, 1f));
         }
     }
 
@@ -93,7 +141,7 @@ public class MoveByTouch : MonoBehaviour
     }
 
 
-    IEnumerator SlowlyDissolve(Renderer renderer, Color initialColor, Color finalColor, float duration, float initialStrength, float targetStrength, bool isAlpha)
+    IEnumerator SlowlyDissolve(Renderer renderer, Color initialColor, Color finalColor, float duration, float initialStrength, float targetStrength)
     {
         float elapsedTime = 0.0f;
         Debug.Log("color " + initialColor);
@@ -104,21 +152,10 @@ public class MoveByTouch : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             dissolveStrength = Mathf.Lerp(initialStrength, targetStrength, elapsedTime / duration);
-            if (isAlpha)
-            {
                 invisibleDissolveMaterial.SetFloat("_DissolveStrength", dissolveStrength);
                 renderer.material = invisibleDissolveMaterial;
-            }
-            else
-            {
-                dissolveMaterial.SetFloat("_DissolveStrength", dissolveStrength);
-                renderer.material = dissolveMaterial;
-
-            }
             yield return null;
         }
-
-
     }
 
     private void OnControllerColliderHit(ControllerColliderHit other)
@@ -127,9 +164,10 @@ public class MoveByTouch : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Breakable"))
             {
-                Destroy(other.gameObject);
                 isBreakablePower = false;
-                StartCoroutine(RevertBreakablePowerAfterDelay());
+                StartCoroutine(ChangeScale(new Vector3(1f, 1f, 1f), 1f));
+                ObstacleBreak.Play();
+                Destroy(other.gameObject);
 
 
             }
@@ -147,19 +185,14 @@ public class MoveByTouch : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         runSpeed = 4f;
-        ChangePlayerMaterialToDefault();
-    }
-
-    IEnumerator RevertBreakablePowerAfterDelay()
-    {
-        yield return null;
-        ChangePlayerMaterialToDefault();
-
+        transform.GetChild(1).gameObject.SetActive(false);
     }
 
     public void Die()
     {
+        gameoverSound.Play();
         Time.timeScale = 0.1f;
         gameOver.SetActive(true);
+        bgAudio.Stop();
     }
 }

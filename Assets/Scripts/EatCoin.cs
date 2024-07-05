@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class EatCoin : MonoBehaviour
 {
     public TextMeshProUGUI score;
+    public AudioSource coinSound;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +15,7 @@ public class EatCoin : MonoBehaviour
         {
             score.text = (int.Parse(score.text) + 1) + "";
             Destroy(gameObject);
+            coinSound.Play();
         }
     }
 

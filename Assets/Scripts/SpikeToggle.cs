@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpikeToggle : MonoBehaviour
 {
     public GameObject spike;
+    public AudioSource spikeAudio;
     private float openSpeed = 0.3f;
 
     void Start()
@@ -15,6 +16,7 @@ public class SpikeToggle : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            // spikeAudio.Play();
             StartCoroutine(DestroySpike());
         }
     }
@@ -22,6 +24,7 @@ public class SpikeToggle : MonoBehaviour
     IEnumerator DestroySpike()
     {
         yield return new WaitForSeconds(openSpeed);
+        
         spike.SetActive(true);
         Destroy(GetComponent<BoxCollider>());
     }
